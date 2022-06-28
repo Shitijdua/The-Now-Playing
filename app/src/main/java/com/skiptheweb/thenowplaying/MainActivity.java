@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,8 +42,8 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-   public static ArrayList<String> movieList = new ArrayList<>();
-   public static ArrayList<String> overviewList = new ArrayList<>();
+    public static ArrayList<String> movieList = new ArrayList<>();
+    public static ArrayList<String> overviewList = new ArrayList<>();
     public static ArrayList<String> popularityList = new ArrayList<>();
     public static ArrayList<String> voteAverageList = new ArrayList<>();
     public static ArrayList<String> backDropPathList = new ArrayList<>();
@@ -50,9 +51,8 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> popularMovieList = new ArrayList<>();
     ArrayList<String> popularMovies = new ArrayList<>();
     ArrayList<Double> pops = new ArrayList<>();
-
-
-
+    ArrayList<Double> doublePopularityList = new ArrayList<>();
+    int count = 0;
 
 
     TextView nextPage;
@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
     ListView movieListView;
     ImageView imageIcon;
     ImageView heart;
+    Button sortByPopularity;
 
-    public static class DownloadTask extends AsyncTask<String, Void, String > {
+    public static class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -80,14 +81,14 @@ public class MainActivity extends AppCompatActivity {
             HttpURLConnection urlConnection = null;
             try {
                 url = new URL(urls[0]);
-                urlConnection  = (HttpURLConnection) url.openConnection();
+                urlConnection = (HttpURLConnection) url.openConnection();
                 InputStream in = urlConnection.getInputStream();
                 InputStreamReader reader = new InputStreamReader(in);
                 int data = reader.read();
 
-                while (data!= -1) {
-                    char current  = (char) data;
-                    result+= current;
+                while (data != -1) {
+                    char current = (char) data;
+                    result += current;
                     data = reader.read();
                 }
 
@@ -113,14 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray arr = new JSONArray(newReleases);
 
 
-                for (int i = 0; i<arr.length();i++) {
+                for (int i = 0; i < arr.length(); i++) {
                     JSONObject jsonPart = arr.getJSONObject(i);
                     title = jsonPart.getString("title");
                     overview = jsonPart.getString("overview");
                     popularity = jsonPart.getString("popularity");
                     voteAverage = jsonPart.getString("vote_average");
                     backDropPath = jsonPart.getString("backdrop_path");
-
 
 
                     Log.i("title", title);
@@ -136,14 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
 
-
             Log.i("popularitylist", String.valueOf(popularityList));
-
 
 
         }
@@ -152,8 +150,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void nextPage(View view) {
+//if sort by popularity button is clicked once, it will automatically sort on the basis of popularity
+
 
         customBaseAdapter.notifyDataSetChanged();
 
@@ -169,16 +168,64 @@ public class MainActivity extends AppCompatActivity {
 
             customBaseAdapter.notifyDataSetChanged();
 
+            if (count >= 1) {
+                sortByPopularity(sortByPopularity);
+            }
+
+            customBaseAdapter.notifyDataSetChanged();
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void sortByPopularity(View view){
+    public void sortByPopularity(View view) {
+
+        ++count;
+       movieList.clear();
+       overviewList.clear();
+       backDropPathList.clear();
 
 
-        Double highestPop = 0.0;
+
+        result = "";
+
+        DownloadTask popularityTask = new DownloadTask();
+
+        try {
+            result = popularityTask.execute("https://api.themoviedb.org/3/movie/now_playing?api_key=9d0e3e33437b228d3184927838d32b9b&language=en-US&page=" + pageNumber).get();
+            customBaseAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.i("Popularity result", result);
+
+        for (int i = 0; i< popularityList.size(); i++) {
+            doublePopularityList.add(Double.parseDouble(popularityList.get(i)));
+        }
+
+        Log.i("double pop list", String.valueOf(doublePopularityList));
+        Double highestNo = 0.0;
+        for (int i = 0; i < doublePopularityList.size(); i++) {
+            if (doublePopularityList.get(i).equals(Collections.max(doublePopularityList))) {
+                highestNo = doublePopularityList.get(i);
+
+               // popularMovies.add(title);
+                Log.i("highst", String.valueOf(highestNo));
+            }
+        }
+
+
+
+        /*
+
+         */
+
+
+        /*Double highestPop = 0.0;
         int positionIndex = 0;
 
         ArrayList<Integer> popularMoviesIndex = new ArrayList<>();
@@ -231,8 +278,9 @@ public class MainActivity extends AppCompatActivity {
 
         // popularMovieList.add(popularityList.get(0));
         // customBaseAdapter = new CustomBaseAdapter(getApplicationContext(),popularMovieList, backDropPathList, backDropPathList );
-    movieListView.setAdapter(popularCustomBaseAdapter);
-    }
+    movieListView.setAdapter(popularCustomBaseAdapter); */
+
+}
 
 
 
@@ -260,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
         nextPage = findViewById(R.id.nextPage);
         imageIcon = findViewById(R.id.imageIcon);
         heart = findViewById(R.id.heart);
+        sortByPopularity = findViewById(R.id.sortByPopularity);
 
 
 
