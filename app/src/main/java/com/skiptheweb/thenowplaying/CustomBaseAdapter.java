@@ -10,6 +10,7 @@ import static com.skiptheweb.thenowplaying.R.color.white;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -90,7 +92,6 @@ public class CustomBaseAdapter extends BaseAdapter {
             public void onClick(View v) {
                // Toast.makeText(context.getApplicationContext(), "Liked Movie" + position, Toast.LENGTH_SHORT).show();
 
-
                 Log.i("moviedadded", movieList.get(position));
 
                 if (likeMovies.contains(movieList.get(position))) {
@@ -104,6 +105,10 @@ public class CustomBaseAdapter extends BaseAdapter {
                     Toast.makeText(context.getApplicationContext(), "Added to liked movies list", Toast.LENGTH_SHORT).show();
 
                 }
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("com.skiptheweb.thenowplaying", Context.MODE_PRIVATE);
+                HashSet<String> set = new HashSet<>(likeMovies);
+                sharedPreferences.edit().putStringSet("likedmovies", set).apply();
 
 
                 Log.i("movies psnd", String.valueOf(likeMovies));

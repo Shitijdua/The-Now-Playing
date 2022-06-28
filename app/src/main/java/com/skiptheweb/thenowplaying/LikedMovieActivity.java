@@ -5,6 +5,7 @@ import static com.skiptheweb.thenowplaying.MainActivity.customBaseAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,15 +15,19 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 public class LikedMovieActivity extends AppCompatActivity {
+
+    SharedPreferences sharedPreferences;
 
     String liked_movies = "";
 
     ListView likedMovieList;
 
     ArrayAdapter arrayAdapter;
+
 
     static ArrayList<String> new_liked_movies = new ArrayList<>();
 
@@ -34,7 +39,19 @@ public class LikedMovieActivity extends AppCompatActivity {
 
 
 
-            likedMovieList = findViewById(R.id.likedMovieList);
+        likedMovieList = findViewById(R.id.likedMovieList);
+        sharedPreferences = getApplicationContext().getSharedPreferences("com.skiptheweb.thenowplaying", Context.MODE_PRIVATE);
+
+        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("likedmovies", null);
+
+        if (set == null) {
+            likeMovies = null;
+
+        } else  {
+
+            likeMovies = new ArrayList(set);
+
+        }
 
             Intent intent = getIntent();
             liked_movies = intent.getStringExtra("liked_movies");
@@ -44,7 +61,6 @@ public class LikedMovieActivity extends AppCompatActivity {
 
 
             //arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, new_liked_movies);
-
 
             //customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), MainActivity.movieList, MainActivity.backDropPathList, MainActivity.backDropPathList );
             //customBaseAdapter.notifyDataSetChanged();

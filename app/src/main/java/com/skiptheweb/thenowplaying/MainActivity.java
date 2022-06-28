@@ -246,15 +246,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("com.skiptheweb.thenowplaying", MODE_PRIVATE );
-        try {
-
-            sharedPreferences.edit().putString("liked_movies", ObjectSerializer.serialize(likeMovies)).apply();
-            Log.i("liked movies", ObjectSerializer.serialize(likeMovies));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
         // testing listview
       //  movieList.add("The Jurrasic Park");
@@ -323,13 +314,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                try {
-                    new_liked_movies = (ArrayList<String>) ObjectSerializer.deserialize(sharedPreferences.getString("liked_movies", ObjectSerializer.serialize(new ArrayList<String>())));
-                    Log.i("new liked movies", new_liked_movies.toString());
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
                 Log.i("displaylikedmovies", "yes");
 
