@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Double> pops = new ArrayList<>();
     ArrayList<Double> doublePopularityList = new ArrayList<>();
     int count = 0;
+    Boolean sorted = false;
 
 
     TextView nextPage;
@@ -168,8 +169,10 @@ public class MainActivity extends AppCompatActivity {
 
             customBaseAdapter.notifyDataSetChanged();
 
-            if (count >= 1) {
-                sortByPopularity(sortByPopularity);
+            if (sorted == true) {
+                if (count >= 1) {
+                    sortByPopularity(sortByPopularity);
+                }
             }
 
             customBaseAdapter.notifyDataSetChanged();
@@ -183,39 +186,68 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortByPopularity(View view) {
 
-        ++count;
-       movieList.clear();
-       overviewList.clear();
-       backDropPathList.clear();
+        if (sorted == false) {
+            sortByPopularity.setText("Unsort");
+            sorted = true;
+            ++count;
+            movieList.clear();
+            overviewList.clear();
+            backDropPathList.clear();
+            popularityList.clear();
+            voteAverageList.clear();
 
 
+            result = "";
 
-        result = "";
+            DownloadTask popularityTask = new DownloadTask();
 
-        DownloadTask popularityTask = new DownloadTask();
-
-        try {
-            result = popularityTask.execute("https://api.themoviedb.org/3/movie/now_playing?api_key=9d0e3e33437b228d3184927838d32b9b&language=en-US&page=" + pageNumber).get();
-            customBaseAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Log.i("Popularity result", result);
-
-        for (int i = 0; i< popularityList.size(); i++) {
-            doublePopularityList.add(Double.parseDouble(popularityList.get(i)));
-        }
-
-        Log.i("double pop list", String.valueOf(doublePopularityList));
-        Double highestNo = 0.0;
-        for (int i = 0; i < doublePopularityList.size(); i++) {
-            if (doublePopularityList.get(i).equals(Collections.max(doublePopularityList))) {
-                highestNo = doublePopularityList.get(i);
-
-               // popularMovies.add(title);
-                Log.i("highst", String.valueOf(highestNo));
+            try {
+                result = popularityTask.execute("https://api.themoviedb.org/3/movie/now_playing?api_key=9d0e3e33437b228d3184927838d32b9b&language=en-US&page=" + pageNumber).get();
+                customBaseAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+            Log.i("Popularity result", result);
+
+            for (int i = 0; i < popularityList.size(); i++) {
+                doublePopularityList.add(Double.parseDouble(popularityList.get(i)));
+            }
+
+            Log.i("double pop list", String.valueOf(doublePopularityList));
+            Double highestNo = 0.0;
+            for (int i = 0; i < doublePopularityList.size(); i++) {
+                if (doublePopularityList.get(i).equals(Collections.max(doublePopularityList))) {
+                    highestNo = doublePopularityList.get(i);
+
+                    // popularMovies.add(title);
+                    Log.i("highst", String.valueOf(highestNo));
+                }
+            }
+            sorted = true;
+        }
+
+        else if (sorted == true){
+            sortByPopularity.setText("Popular");
+            movieList.clear();
+            overviewList.clear();
+            backDropPathList.clear();
+            popularityList.clear();
+            voteAverageList.clear();
+
+            result = "";
+
+            DownloadTask popularityTask = new DownloadTask();
+
+            try {
+                result = popularityTask.execute("https://api.themoviedb.org/3/movie/now_playing?api_key=9d0e3e33437b228d3184927838d32b9b&language=en-US&page=" + pageNumber).get();
+                customBaseAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            sorted = false;
+
         }
 
 

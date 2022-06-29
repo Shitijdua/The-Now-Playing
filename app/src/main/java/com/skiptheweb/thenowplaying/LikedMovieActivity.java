@@ -45,7 +45,7 @@ public class LikedMovieActivity extends AppCompatActivity {
         HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("likedmovies", null);
 
         if (set == null) {
-            likeMovies = null;
+            return;
 
         } else  {
 
