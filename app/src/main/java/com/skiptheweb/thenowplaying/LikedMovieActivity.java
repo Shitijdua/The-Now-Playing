@@ -40,6 +40,8 @@ public class LikedMovieActivity extends AppCompatActivity {
 
 
         likedMovieList = findViewById(R.id.likedMovieList);
+
+        //to save liked movie list in shared preference using Hash Set
         sharedPreferences = getApplicationContext().getSharedPreferences("com.skiptheweb.thenowplaying", Context.MODE_PRIVATE);
 
         HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("likedmovies", null);

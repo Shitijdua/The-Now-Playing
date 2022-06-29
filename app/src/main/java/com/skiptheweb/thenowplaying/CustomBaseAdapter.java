@@ -82,11 +82,10 @@ public class CustomBaseAdapter extends BaseAdapter {
         ImageView movieImg = (ImageView) convertView.findViewById(R.id.movie_imageview);
         ImageView likeImg = (ImageView) convertView.findViewById(R.id.imageIcon);
 
-        textView.setTextColor(R.color.black);
 
 
 
-
+//on clicking on heart for particular movie
         likeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,18 +93,20 @@ public class CustomBaseAdapter extends BaseAdapter {
 
                 Log.i("moviedadded", movieList.get(position));
 
+                //if liked movie is already in the list
                 if (likeMovies.contains(movieList.get(position))) {
 
                     Toast.makeText(context.getApplicationContext(), "Already in the liked list", Toast.LENGTH_SHORT).show();
                     
 
                 } else {
-
+//add liked movie to the list
                     likeMovies.add(movieList.get(position));
                     Toast.makeText(context.getApplicationContext(), "Added to liked movies list", Toast.LENGTH_SHORT).show();
 
                 }
 
+                //retreive shared preference
                 SharedPreferences sharedPreferences = context.getSharedPreferences("com.skiptheweb.thenowplaying", Context.MODE_PRIVATE);
                 HashSet<String> set = new HashSet<>(likeMovies);
                 sharedPreferences.edit().putStringSet("likedmovies", set).apply();
@@ -138,7 +139,7 @@ public class CustomBaseAdapter extends BaseAdapter {
 
         notifyDataSetChanged();
 
-
+//to load image on custom adapter from API
         Picasso.with(context)
                 .load(resource)
                 .resize(50, 50) // here you resize your image to whatever width and height you like

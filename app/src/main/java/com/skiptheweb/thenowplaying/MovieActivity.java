@@ -41,13 +41,14 @@ public class MovieActivity extends AppCompatActivity {
     Bitmap res;
     static boolean likedMovie = false;
 
+    //Download image and store on Bitmap
     public Bitmap downloadImage(View view) {
         ImageDownloader task = new ImageDownloader();
         Bitmap myImage = null;
 
 
         try {
-            myImage = task.execute(resource).get();
+            myImage = task.execute(resource).get(); //resources store the url with backdrop path to load particular image
             Log.i("myimg", String.valueOf(myImage));
             movieImage.setImageBitmap(myImage);
 
@@ -88,12 +89,12 @@ public class MovieActivity extends AppCompatActivity {
         Log.i("Popularity", popularity);
         Log.i("vote average", voteAverage);
         Log.i("BackdropPath is", backDropPath);
-        titleTextView.setText(title);
-        overviewTextView.setText(overview);
-        popularityTextView.setText("Popularity: " + popularity);
+        titleTextView.setText(title); //setting title
+        overviewTextView.setText(overview); // setting overview
+        popularityTextView.setText("Popularity: " + popularity); //setting popularity
         //finalVoteAverage = Double.parseDouble(voteAverage)*10;
-        finalVoteAverage = Double.parseDouble(voteAverage);
-        finalVoteAverage = finalVoteAverage*10;
+        finalVoteAverage = Double.parseDouble(voteAverage); // setting vote average
+        finalVoteAverage = finalVoteAverage*10; //multiply by 10 to show in percentage
 
         voteAverageTextView.setText(finalVoteAverage + "%");
         resource = "https://image.tmdb.org/t/p/w500" + backDropPath;

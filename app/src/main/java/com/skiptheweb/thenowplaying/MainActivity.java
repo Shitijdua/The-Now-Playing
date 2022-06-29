@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     TextView nextPage;
 
-    ArrayAdapter arrayAdapter;
     int pageNumber = 1;
     static String result = "";
     static String title = "";
@@ -72,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageIcon;
     ImageView heart;
     Button sortByPopularity;
+
+    //Download Movie API
 
     public static class DownloadTask extends AsyncTask<String, Void, String> {
 
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //Execute these tasks after download of API Information
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
@@ -127,13 +129,13 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("title", title);
                     Log.i("overview", overview);
                     Log.i("backdroppath", backDropPath);
-                    movieList.add(title);
-                    overviewList.add(overview);
-                    popularityList.add(popularity);
-                    voteAverageList.add(voteAverage);
-                    backDropPathList.add(backDropPath);
-                    popularMovieList.add(title);
-                    customBaseAdapter.notifyDataSetChanged();
+                    movieList.add(title); // list of all movie titles
+                    overviewList.add(overview); //list of all movie overviews
+                    popularityList.add(popularity); //list of popularity of all movies
+                    voteAverageList.add(voteAverage); //list of vote average
+                    backDropPathList.add(backDropPath); //list of url of thumbnail images
+                    //popularMovieList.add(title);
+                    customBaseAdapter.notifyDataSetChanged(); //notify change of data to adapter
 
                 }
 
@@ -150,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    //Function to go to the next page and load more movies
 
     public void nextPage(View view) {
 //if sort by popularity button is clicked once, it will automatically sort on the basis of popularity
@@ -169,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
 
             customBaseAdapter.notifyDataSetChanged();
 
+            //change of popular button text
+            //if button is pressed need to set all new movies based on popularity
             if (sorted == true) {
                 if (count >= 1) {
                     sortByPopularity(sortByPopularity);
@@ -184,9 +190,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //function to set all movies based on their popularity
     public void sortByPopularity(View view) {
 
         if (sorted == false) {
+            pageNumber++;
             sortByPopularity.setText("Unsort");
             sorted = true;
             ++count;
@@ -228,6 +236,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         else if (sorted == true){
+
+            pageNumber = 1;
             sortByPopularity.setText("Popular");
             movieList.clear();
             overviewList.clear();
@@ -322,8 +332,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
@@ -375,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+//Create new download object to store API Data
         DownloadTask task = new DownloadTask();
         String result = null;
         movieListView.setAdapter(customBaseAdapter);
@@ -391,6 +399,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // if someone clicks on heart icon to see liked movies by the user
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -398,6 +407,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.i("displaylikedmovies", "yes");
 
+                //move to liked movies page
                 Intent intent = new Intent(getApplicationContext(), LikedMovieActivity.class);
 
                 intent.putExtra("new_liked_movies", new_liked_movies);
@@ -407,6 +417,7 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
+        //On clicking any movie, it is redirected to movie detail page
         movieListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

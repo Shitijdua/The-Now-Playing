@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F5C9"
     tools:context=".MovieActivity">
 
     <ImageView
@@ -28,7 +27,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:text="Jurrasic World"
-        android:textColor="#000000"
+        android:textColor="?android:textColorPrimary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -56,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="Popularity:"
-        android:textColor="#000000"
+        android:textColor="?android:textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
@@ -86,7 +85,7 @@
                 android:layout_marginBottom="52dp"
                 android:scrollbars="vertical"
                 android:text="Jurrasic world is a"
-                android:textColor="#000000"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
